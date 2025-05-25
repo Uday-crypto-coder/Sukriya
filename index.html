@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sukriya - Home Feed</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Welcome to Sukriya, <span id="username"></span></h1>
+
+  <section class="upload-section">
+    <h3>Post something new</h3>
+    <input type="text" id="caption" placeholder="Write a caption..." />
+    <input type="text" id="image-url" placeholder="Paste image URL..." />
+    <button onclick="uploadPost()">Post</button>
+  </section>
+
+  <section class="feed" id="feed-container">
+    <h3>Feed</h3>
+  </section>
+
+  <a href="profile.html">View Profile</a>
+
+  <script src="mockdb.js"></script>
+  <script src="feed.js"></script>
+</body>
+</html>

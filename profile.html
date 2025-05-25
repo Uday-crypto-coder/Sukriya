@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sukriya - Profile</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="profile-container">
+    <h2 id="profile-name"></h2>
+    <img id="avatar" class="avatar" src="" alt="Avatar">
+    <p id="bio-text"></p>
+
+    <div id="edit-section" style="display:none;">
+      <input type="text" id="edit-bio" placeholder="Enter your bio">
+      <input type="text" id="edit-avatar" placeholder="Avatar image URL">
+      <button onclick="saveProfile()">Save</button>
+    </div>
+
+    <div id="follow-controls"></div>
+    <p><b>Followers:</b> <span id="followers-count">0</span></p>
+    <p><b>Following:</b> <span id="following-count">0</span></p>
+    <a href="index.html">⬅ Back to Home</a>
+  </div>
+
+  <script src="mockdb.js"></script>
+  <script src="profile.js"></script>
+</body>
+</html>

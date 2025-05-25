@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sukriya - Login / Sign Up</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background: #fafafa;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+    }
+    .auth-box {
+      background: white;
+      padding: 40px;
+      border: 1px solid #ddd;
+      width: 320px;
+      text-align: center;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    h2 {
+      margin-bottom: 20px;
+      font-weight: 400;
+    }
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 8px;
+      margin-bottom: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #0095f6;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #007ac1;
+    }
+    .toggle-link {
+      margin-top: 15px;
+      color: #0095f6;
+      cursor: pointer;
+      font-size: 14px;
+      user-select: none;
+    }
+    .error {
+      color: #e74c3c;
+      margin-bottom: 10px;
+      font-size: 13px;
+      min-height: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-box">
+    <h2 id="form-title">Login to Sukriya</h2>
+    <div class="error" id="error-msg"></div>
+    <input type="email" id="email" placeholder="Email address" />
+    <input type="password" id="password" placeholder="Password" />
+    <button id="auth-btn" onclick="submitForm()">Log In</button>
+    <div class="toggle-link" id="toggle-form" onclick="toggleForm()">Don't have an account? Sign Up</div>
+  </div>
+
+  <script>
+    let isLogin = true;
+
+    function toggleForm() {
+      isLogin = !isLogin;
+      document.getElementById('error-msg').textContent = '';
+      if (isLogin) {
+        document.getElementById('form-title').textContent = 'Login to Sukriya';
+        document.getElementById('auth-btn').textContent = 'Log In';
+        document.getElementById('toggle-form').textContent = "Don't have an account? Sign Up";
+      } else {
+        document.getElementById('form-title').textContent = 'Sign Up for Sukriya';
+        document.getElementById('auth-btn').textContent = 'Sign Up';
+        document.getElementById('toggle-form').textContent = "Already have an account? Log In";
+      }
+    }
+
+    function getUsers() {
+      return JSON.parse(localStorage.getItem('users')) || [];
+    }
+
+    function saveUsers(users) {
+      localStorage.setItem('users', JSON.stringify(users));
+    }
+
+    function validateEmail(email) {
+      // Basic email regex
+      return /\S+@\S+\.\S+/.test(email);
+    }
+
+    function submitForm() {
+      const email = document.getElementById('email').value.trim().toLowerCase();
+      const password = document.getElementById('password').value;
+      const errorDiv = document.getElementById('error-msg');
+
+      if (!validateEmail(email)) {
+        errorDiv.textContent = 'Please enter a valid email address.';
+        return;
+      }
+      if (password.length < 6) {
+        errorDiv.textContent = 'Password must be at least 6 characters.';
+        return;
+      }
+
+      let users = getUsers();
+
+      if (isLogin) {
+        // Login flow
+        const user = users.find(u => u.email === email);
+        if (!user) {
+          errorDiv.textContent = "User doesn't exist. Please sign up.";
+          return;
+        }
+        if (user.password !== password) {
+          errorDiv.textContent = "Incorrect password.";
+          return;
+        }
+        // Save logged-in user email to localStorage
+        localStorage.setItem('currentUser', user.email);
+        window.location.href = 'index.html';
+      } else {
+        // Sign up flow
+        if (users.some(u => u.email === email)) {
+          errorDiv.textContent = "Email already registered. Please log in.";
+          return;
+        }
+        // Save new user
+        users.push({ email, password });
+        saveUsers(users);
+        localStorage.setItem('currentUser', email);
+        window.location.href = 'index.html';
+      }
+    }
+  </script>
+</body>
+</html>
